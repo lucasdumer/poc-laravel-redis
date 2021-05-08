@@ -18,4 +18,9 @@ class AuthorService
     {
         return $this->authorRepository->create($request);
     }
+
+    public function find(int $id)
+    {
+        return $this->authorRepository->find($id);
+    }
 }

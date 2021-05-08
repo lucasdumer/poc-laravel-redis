@@ -21,5 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/author', [AuthorController::class, 'create']);
+Route::get('/author/{id}', [AuthorController::class, 'find']);
 
 Route::post('/books', [BookController::class, 'create']);

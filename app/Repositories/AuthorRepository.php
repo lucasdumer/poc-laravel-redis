@@ -18,4 +18,14 @@ class AuthorRepository
             throw new \Exception("Error creating author. ".$e->getMessage());
         }
     }
+
+    public function find(int $id)
+    {
+        try {
+            $author = Author::find($id);
+            return $author;
+        } catch(\Exception $e) {
+            throw new \Exception("Error find author. ".$e->getMessage());
+        }
+    }
 }
