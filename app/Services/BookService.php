@@ -31,7 +31,9 @@ class BookService
             if (empty($author)) {
                 throw new \Exception("Dont find author.");
             }
-            return $this->bookRepository->create($request, $author);
+            $book = $this->bookRepository->create($request, $author);
+            Redis::set('books', "");
+            return $book;
         } catch(\Exception $e) {
             throw new \Exception("Error on creating book. ".$e->getMessage());
         }
@@ -49,7 +51,13 @@ class BookService
     public function list(BookListRequest $request)
     {
         try {
-            return $this->bookRepository->list($request);
+            $books = Redis::get('books');
+            if (!empty($books)) {
+                return json_decode($books);
+            }
+            $books = $this->bookRepository->list($request);
+            Redis::set('books', json_encode($books));
+            return $books;
         } catch(\Exception $e) {
             throw new \Exception("Error on list book. ".$e->getMessage());
         }
@@ -59,6 +67,7 @@ class BookService
     {
         try {
             $this->bookRepository->delete((int) $request->id);
+            Redis::set('books', "");
         } catch(\Exception $e) {
             throw new \Exception("Error on delete book. ".$e->getMessage());
         }

@@ -22,7 +22,9 @@ class AuthorService
     public function create(AuthorCreateRequest $request): Author
     {
         try {
-            return $this->authorRepository->create($request);
+            $author = $this->authorRepository->create($request);
+            Redis::set('authors', "");
+            return $author;
         } catch(\Exception $e) {
             throw new \Exception("Error on creating author. ".$e->getMessage());
         }
@@ -40,12 +42,12 @@ class AuthorService
     public function list(AuthorListRequest $request)
     {
         try {
-            $authors = Redis::get('author:list');
+            $authors = Redis::get('authors');
             if (!empty($authors)) {
                 return json_decode($authors);
             }
             $authors = $this->authorRepository->list($request);
-            Redis::set('author:list', json_encode($authors));
+            Redis::set('authors', json_encode($authors));
             return $authors;
         } catch(\Exception $e) {
             throw new \Exception("Error on list author. ".$e->getMessage());
@@ -56,6 +58,7 @@ class AuthorService
     {
         try {
             $this->authorRepository->delete((int) $request->id);
+            Redis::set('authors', "");
         } catch(\Exception $e) {
             throw new \Exception("Error on delete author. ".$e->getMessage());
         }
