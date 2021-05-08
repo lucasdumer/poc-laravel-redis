@@ -20,3 +20,8 @@ services:
       - '3306:3306'
     volumes:
       - ./.data:/var/lib/mysql
+  redis:
+    image: redis
+    command: redis-server --requirepass 123456
+    ports:
+      - "6379:6379"

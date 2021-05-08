@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Redis;
 use App\Requests\AuthorCreateRequest;
 use App\Requests\AuthorDeleteRequest;
 use App\Requests\AuthorFindRequest;
@@ -39,7 +40,13 @@ class AuthorService
     public function list(AuthorListRequest $request)
     {
         try {
-            return $this->authorRepository->list($request);
+            $authors = Redis::get('author:list');
+            if (!empty($authors)) {
+                return json_decode($authors);
+            }
+            $authors = $this->authorRepository->list($request);
+            Redis::set('author:list', json_encode($authors));
+            return $authors;
         } catch(\Exception $e) {
             throw new \Exception("Error on list author. ".$e->getMessage());
         }
