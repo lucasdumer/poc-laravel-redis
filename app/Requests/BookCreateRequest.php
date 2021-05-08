@@ -10,7 +10,7 @@ class BookCreateRequest extends FormRequest
     {
         return [            
             'name' => ['required', 'max:255'],
-            'authorId' => ['required|integer']
+            'authorId' => 'required|integer'
         ];
     }
 }

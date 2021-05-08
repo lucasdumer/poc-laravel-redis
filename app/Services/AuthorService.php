@@ -20,21 +20,37 @@ class AuthorService
 
     public function create(AuthorCreateRequest $request): Author
     {
-        return $this->authorRepository->create($request);
+        try {
+            return $this->authorRepository->create($request);
+        } catch(\Exception $e) {
+            throw new \Exception("Error on creating author. ".$e->getMessage());
+        }
     }
 
     public function find(AuthorFindRequest $request): ?Author
     {
-        return $this->authorRepository->find((int) $request->id);
+        try {
+            return $this->authorRepository->find((int) $request->id);
+        } catch(\Exception $e) {
+            throw new \Exception("Error on find author. ".$e->getMessage());
+        }
     }
 
     public function list(AuthorListRequest $request)
     {
-        return $this->authorRepository->list($request);
+        try {
+            return $this->authorRepository->list($request);
+        } catch(\Exception $e) {
+            throw new \Exception("Error on list author. ".$e->getMessage());
+        }
     }
 
     public function delete(AuthorDeleteRequest $request): void
     {
-        $this->authorRepository->delete((int) $request->id);
+        try {
+            $this->authorRepository->delete((int) $request->id);
+        } catch(\Exception $e) {
+            throw new \Exception("Error on delete author. ".$e->getMessage());
+        }
     }
 }

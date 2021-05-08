@@ -18,7 +18,7 @@ class BookListRequest extends FormRequest
     {
         return [
             'name' => ['max:255'],
-            'authorId' => ['integer']
+            'authorId' => ['integer', 'nullable']
         ];
     }
 }

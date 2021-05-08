@@ -17,7 +17,7 @@ class AuthorRepository
             $author->save();
             return $author;
         } catch(\Exception $e) {
-            throw new \Exception("Error creating author. ".$e->getMessage());
+            throw new \Exception("Database error on creating author. ".$e->getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ class AuthorRepository
             $author = Author::find($id);
             return $author;
         } catch(\Exception $e) {
-            throw new \Exception("Error find author. ".$e->getMessage());
+            throw new \Exception("Database error on find author. ".$e->getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ class AuthorRepository
             }
             return $author->get();
         } catch(\Exception $e) {
-            throw new \Exception("Error list author. ".$e->getMessage());
+            throw new \Exception("Database error on list author. ".$e->getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ class AuthorRepository
             }
             $author->delete();
         } catch(\Exception $e) {
-            throw new \Exception("Error delete author. ".$e->getMessage());
+            throw new \Exception("Database error on delete author. ".$e->getMessage());
         }
     }
 }
