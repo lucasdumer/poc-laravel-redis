@@ -4,21 +4,19 @@ namespace App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookListRequest extends FormRequest
+class AuthorFindRequest extends FormRequest
 {
     public function all($keys = null)
     {
         $data = parent::all();
-        $data['name'] = $this->query('name');
-        $data['authorId'] = $this->query('authorId');
+        $data['id'] = $this->route('id');
         return $data;
     }
 
     public function rules()
     {
         return [
-            'name' => ['max:255'],
-            'authorId' => ['integer']
+            'id' => 'required|integer'
         ];
     }
 }

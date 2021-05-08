@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Requests\BookCreateRequest;
-use App\Requests\BookDeleteRequest;
-use App\Requests\BookFindRequest;
-use App\Requests\BookListRequest;
+use App\Requests\AuthorCreateRequest;
+use App\Requests\AuthorDeleteRequest;
+use App\Requests\AuthorFindRequest;
+use App\Requests\AuthorListRequest;
 use App\Services\AuthorService;
 
 class AuthorController extends Controller
@@ -17,7 +17,7 @@ class AuthorController extends Controller
         $this->authorService = $authorService;
     }
 
-    public function create(BookCreateRequest $request)
+    public function create(AuthorCreateRequest $request)
     {
         try {
             $author = $this->authorService->create($request);
@@ -27,7 +27,7 @@ class AuthorController extends Controller
         }
     }
 
-    public function find(BookFindRequest $request)
+    public function find(AuthorFindRequest $request)
     {
         try {
             $author = $this->authorService->find($request);
@@ -37,7 +37,7 @@ class AuthorController extends Controller
         }
     }
 
-    public function list(BookListRequest $request)
+    public function list(AuthorListRequest $request)
     {
         try {
             $authors = $this->authorService->list($request);
@@ -47,7 +47,7 @@ class AuthorController extends Controller
         }
     }
 
-    public function delete(BookDeleteRequest $request)
+    public function delete(AuthorDeleteRequest $request)
     {
         try {
             $this->authorService->delete($request);

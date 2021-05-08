@@ -26,3 +26,6 @@ Route::get('/authors', [AuthorController::class, 'list']);
 Route::delete('/authors/{id}', [AuthorController::class, 'delete']);
 
 Route::post('/books', [BookController::class, 'create']);
+Route::post('/books/{id}', [BookController::class, 'find']);
+Route::post('/books', [BookController::class, 'list']);
+Route::post('/books/{id}', [BookController::class, 'delete']);
