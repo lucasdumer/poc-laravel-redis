@@ -20,7 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/author', [AuthorController::class, 'create']);
-Route::get('/author/{id}', [AuthorController::class, 'find']);
+Route::post('/authors', [AuthorController::class, 'create']);
+Route::get('/authors/{id}', [AuthorController::class, 'find']);
+Route::get('/authors', [AuthorController::class, 'list']);
+Route::delete('/authors/{id}', [AuthorController::class, 'delete']);
 
 Route::post('/books', [BookController::class, 'create']);
