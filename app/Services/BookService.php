@@ -9,6 +9,7 @@ use App\Requests\BookListRequest;
 use App\Repositories\AuthorRepository;
 use App\Repositories\BookRepository;
 use App\Models\Book;
+use App\Services\RedisService;
 
 class BookService
 {
@@ -16,12 +17,16 @@ class BookService
 
     private $authorRepository;
 
+    private $redisService;
+
     public function __construct(
         BookRepository $bookRepository,
-        AuthorRepository $authorRepository
+        AuthorRepository $authorRepository,
+        RedisService $redisService
     ) {
         $this->bookRepository = $bookRepository;
         $this->authorRepository = $authorRepository;
+        $this->redisService = $redisService;
     }
 
     public function create(BookCreateRequest $request): Book
@@ -32,7 +37,7 @@ class BookService
                 throw new \Exception("Dont find author.");
             }
             $book = $this->bookRepository->create($request, $author);
-            Redis::set('books', "");
+            $this->redisService->clear('books');
             return $book;
         } catch(\Exception $e) {
             throw new \Exception("Error on creating book. ".$e->getMessage());
@@ -51,12 +56,12 @@ class BookService
     public function list(BookListRequest $request)
     {
         try {
-            $books = Redis::get('books');
+            $books = $this->redisService->get('books');
             if (!empty($books)) {
-                return json_decode($books);
+                return $books;
             }
             $books = $this->bookRepository->list($request);
-            Redis::set('books', json_encode($books));
+            $this->redisService->set('books', $books);
             return $books;
         } catch(\Exception $e) {
             throw new \Exception("Error on list book. ".$e->getMessage());
@@ -67,7 +72,7 @@ class BookService
     {
         try {
             $this->bookRepository->delete((int) $request->id);
-            Redis::set('books', "");
+            $this->redisService->clear('books');
         } catch(\Exception $e) {
             throw new \Exception("Error on delete book. ".$e->getMessage());
         }
