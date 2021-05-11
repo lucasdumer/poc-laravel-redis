@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -58,5 +60,32 @@ class Handler extends ExceptionHandler
 			'message' => $e->validator->errors()->getMessages(), 
 			'data' => null
         ], 422);
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \TypeError) {
+            return response()->json([
+                'status'=> 'error', 
+                'message' => $exception->getMessage(), 
+                'data' => null
+            ], 500);
+        }
+        if ($exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'status'=> 'error', 
+                'message' => 'Not Found', 
+                'data' => null
+            ], 404);
+        }
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'status'=> 'error', 
+                'message' => 'Not Allowed', 
+                'data' => null
+            ], 405);
+        }
+    
+        return parent::render($request, $exception);
     }
 }
