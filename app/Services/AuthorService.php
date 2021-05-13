@@ -6,6 +6,7 @@ use App\Requests\AuthorCreateRequest;
 use App\Requests\AuthorDeleteRequest;
 use App\Requests\AuthorFindRequest;
 use App\Requests\AuthorListRequest;
+use App\Requests\AuthorUpdateRequest;
 use App\Repositories\AuthorRepository;
 use App\Models\Author;
 use App\Services\RedisService;
@@ -66,6 +67,17 @@ class AuthorService
             $this->redisService->clear('authors');
         } catch(\Exception $e) {
             throw new \Exception("Error on delete author. ".$e->getMessage());
+        }
+    }
+
+    public function update(AuthorUpdateRequest $request): ?Author
+    {
+        try {
+            $author = $this->authorRepository->update($request);
+            $this->redisService->clear('authors');
+            return $author;
+        } catch(\Exception $e) {
+            throw new \Exception("Error on update author. ".$e->getMessage());
         }
     }
 }

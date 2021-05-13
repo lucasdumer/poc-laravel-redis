@@ -6,6 +6,7 @@ use App\Requests\BookCreateRequest;
 use App\Requests\BookDeleteRequest;
 use App\Requests\BookFindRequest;
 use App\Requests\BookListRequest;
+use App\Requests\BookUpdateRequest;
 use App\Repositories\AuthorRepository;
 use App\Repositories\BookRepository;
 use App\Models\Book;
@@ -75,6 +76,17 @@ class BookService
             $this->redisService->clear('books');
         } catch(\Exception $e) {
             throw new \Exception("Error on delete book. ".$e->getMessage());
+        }
+    }
+
+    public function update(BookUpdateRequest $request): ?Book
+    {
+        try {
+            $author = $this->bookRepository->update($request);
+            $this->redisService->clear('books');
+            return $author;
+        } catch(\Exception $e) {
+            throw new \Exception("Error on update book. ".$e->getMessage());
         }
     }
 }

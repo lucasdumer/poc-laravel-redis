@@ -6,6 +6,7 @@ use App\Requests\BookCreateRequest;
 use App\Requests\BookDeleteRequest;
 use App\Requests\BookFindRequest;
 use App\Requests\BookListRequest;
+use App\Requests\BookUpdateRequest;
 use App\Services\BookService;
 
 class BookController extends Controller
@@ -52,6 +53,16 @@ class BookController extends Controller
         try {
             $this->bookService->delete($request);
             return $this->success();
+        } catch(\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    public function update(BookUpdateRequest $request)
+    {
+        try {
+            $book = $this->bookService->update($request);
+            return $this->success($book);
         } catch(\Exception $e) {
             return $this->error($e);
         }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Requests\BookCreateRequest;
 use App\Requests\BookListRequest;
+use App\Requests\BookUpdateRequest;
 use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,22 @@ class BookRepository
             $book->delete();
         } catch(\Exception $e) {
             throw new \Exception("Database error on delete book. ".$e->getMessage());
+        }
+    }
+
+    public function update(BookUpdateRequest $request): ?Book
+    {
+        try {
+            $book = Book::find($request->id);
+            if (empty($book)) {
+                throw new \Exception("No find with id.");
+            }
+            $book->name = $request->name;
+            $book->author_id = $request->authorId;
+            $book->save();
+            return $book;
+        } catch(\Exception $e) {
+            throw new \Exception("Database error on update book. ".$e->getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Requests\AuthorCreateRequest;
 use App\Requests\AuthorListRequest;
+use App\Requests\AuthorUpdateRequest;
 use App\Models\Author;
 use Illuminate\Support\Facades\DB;
 
@@ -54,6 +55,21 @@ class AuthorRepository
             $author->delete();
         } catch(\Exception $e) {
             throw new \Exception("Database error on delete author. ".$e->getMessage());
+        }
+    }
+
+    public function update(AuthorUpdateRequest $request): ?Author
+    {
+        try {
+            $author = Author::find($request->id);
+            if (empty($author)) {
+                throw new \Exception("No find with id.");
+            }
+            $author->name = $request->name;
+            $author->save();
+            return $author;
+        } catch(\Exception $e) {
+            throw new \Exception("Database error on update author. ".$e->getMessage());
         }
     }
 }

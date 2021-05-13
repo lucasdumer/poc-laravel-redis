@@ -6,6 +6,7 @@ use App\Requests\AuthorCreateRequest;
 use App\Requests\AuthorDeleteRequest;
 use App\Requests\AuthorFindRequest;
 use App\Requests\AuthorListRequest;
+use App\Requests\AuthorUpdateRequest;
 use App\Services\AuthorService;
 
 class AuthorController extends Controller
@@ -52,6 +53,16 @@ class AuthorController extends Controller
         try {
             $this->authorService->delete($request);
             return $this->success();
+        } catch(\Exception $e) {
+            return $this->error($e);
+        }
+    }
+
+    public function update(AuthorUpdateRequest $request)
+    {
+        try {
+            $author = $this->authorService->update($request);
+            return $this->success($author);
         } catch(\Exception $e) {
             return $this->error($e);
         }
