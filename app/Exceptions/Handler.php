@@ -57,36 +57,35 @@ class Handler extends ExceptionHandler
         }
 
         return response()->json([
-			'status'=> 'error', 
-			'message' => $e->validator->errors()->getMessages(), 
+			'status'=> 'error',
+			'message' => $e->validator->errors()->getMessages(),
 			'data' => null
         ], 422);
     }
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof \TypeError || $exception instanceof FatalError) {
-            return response()->json([
-                'status'=> 'error', 
-                'message' => $exception->getMessage(), 
-                'data' => null
-            ], 500);
-        }
         if ($exception instanceof NotFoundHttpException) {
             return response()->json([
-                'status'=> 'error', 
-                'message' => 'Not Found', 
+                'status'=> 'error',
+                'message' => 'Not Found',
                 'data' => null
             ], 404);
         }
         if ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
-                'status'=> 'error', 
-                'message' => 'Not Allowed', 
+                'status'=> 'error',
+                'message' => 'Not Allowed',
                 'data' => null
             ], 405);
         }
-    
+        if ($exception instanceof Throwable) {
+            return response()->json([
+                'status'=> 'error',
+                'message' => $exception->getMessage(),
+                'data' => null
+            ], 500);
+        }
         return parent::render($request, $exception);
     }
 }

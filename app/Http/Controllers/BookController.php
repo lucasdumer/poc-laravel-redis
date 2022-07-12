@@ -11,60 +11,31 @@ use App\Services\BookService;
 
 class BookController extends Controller
 {
-    private $bookService;
-
-    public function __construct(BookService $bookService)
-    {
-        $this->bookService = $bookService;
-    }
+    public function __construct(private BookService $bookService) {}
 
     public function create(BookCreateRequest $request)
     {
-        try {
-            $book = $this->bookService->create($request);
-            return $this->success($book);
-        } catch(\Exception $e) {
-            return $this->error($e);
-        }
+        return $this->success($this->bookService->create($request));
     }
 
     public function find(BookFindRequest $request)
     {
-        try {
-            $book = $this->bookService->find($request);
-            return $this->success($book);
-        } catch(\Exception $e) {
-            return $this->error($e);
-        }
+        return $this->success($this->bookService->find($request));
     }
 
     public function list(BookListRequest $request)
     {
-        try {
-            $book = $this->bookService->list($request);
-            return $this->success($book);
-        } catch(\Exception $e) {
-            return $this->error($e);
-        }
+        return $this->success($this->bookService->list($request));
     }
 
     public function delete(BookDeleteRequest $request)
     {
-        try {
-            $this->bookService->delete($request);
-            return $this->success();
-        } catch(\Exception $e) {
-            return $this->error($e);
-        }
+        $this->bookService->delete($request);
+        return $this->success();
     }
 
     public function update(BookUpdateRequest $request)
     {
-        try {
-            $book = $this->bookService->update($request);
-            return $this->success($book);
-        } catch(\Exception $e) {
-            return $this->error($e);
-        }
+        return $this->success($this->bookService->update($request));
     }
 }
